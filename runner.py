@@ -52,7 +52,7 @@ def check_perform_sell(stock_ticker, purchase_price):
     while True:
         current_stock_price = sdg.get_current_stock_data(stock_ticker)['Close']
         price_change_percent = util.calculate_price_change(current_stock_price, all_active_positions[stock_ticker])
-        print("Checking", stock_ticker, "Gains/Losses", price_change_percent, "Price: $", current_stock_price) 
+        print("Checking", stock_ticker, "Gains/Losses", price_change_percent, "Price: $", current_stock_price)
         if sa.moving_average_checker(stock_ticker) < 0 or price_change_percent <= -const.MAX_STOP_LOSS_PERCENT or sa.volume_checker(stock_ticker) < 0:
             alpaca.sell_position(stock_ticker)
             del all_active_positions[stock_ticker]
@@ -63,8 +63,8 @@ if __name__ == "__main__":
     #Initializing important stuff
     news = news.NewsGetter()
     alpaca = alp.Alpaca()
-    active_positions_to_check = {} # key is stock ticker, value is stock purchase price 
-    all_active_positions = {} # key is stock ticker, value is stock purchase price 
+    active_positions_to_check = {} # key is stock ticker, value is stock purchase price
+    all_active_positions = {} # key is stock ticker, value is stock purchase price
     positions = alpaca.get_positions()
     for position in positions: #todo also add orders
         active_positions_to_check[position.symbol] = float(position.cost_basis) #cost basis not working well
@@ -78,6 +78,7 @@ if __name__ == "__main__":
             print("New Iteration of Stock Scanning")
             current_time = datetime.now().strftime("%H:%M")
             # current_time = "12:01"
+            print("Current Time is: ", current_time)
             if current_time > const.STOCK_MARKET_OPEN_TIME and current_time < const.STOCK_MARKET_CLOSE_TIME:
                 if first_time_run:
                     threading.Thread(target=stock_position_analyzer).start()
